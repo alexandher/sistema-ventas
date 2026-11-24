@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <!-- Propiedades de Spring Boot -->
+    <springProperty scope="context"
+                    name="NOMBRE_APP"
+                    source="spring.application.name"
+                    defaultValue="pedido-service"/>
+
+    <springProperty scope="context"
+                    name="ARCHIVO_LOG"
+                    source="logging.file.name"
+                    defaultValue="logs/${NOMBRE_APP}.log"/>
+
+    <!-- Configuración base de Logback -->
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+
+    <!-- Appender de archivo -->
+    <appender name="ARCHIVO"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+
+        <file>${ARCHIVO_LOG}</file>
+
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder"/>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+
+            <!-- Rotación diaria -->
+            <fileNamePattern>logs/${NOMBRE_APP}.%d{yyyy-MM-dd}.log.gz</fileNamePattern>
+
+            <!-- Conservar archivos durante 30 días -->
+            <maxHistory>30</maxHistory>
+
+            <!-- Límite total de almacenamiento -->
+            <totalSizeCap>1GB</totalSizeCap>
+
+        </rollingPolicy>
+
+
+
+
+    </appender>
+
+
+
+    <root level="INFO">
+        <appender-ref ref="ARCHIVO"/>
+    </root>
+
+</configuration>
